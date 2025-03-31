@@ -28,14 +28,6 @@ class GameObject{
     bind(){
         this.#mesh.bind();
     }
-
-    draw(){
-        this.bind();
-
-        this.#mesh.Material.setUniformMatrix4fv("u_WorldMatrix", this.#transform.WorldMatrix);
-
-        this.#gl.drawElements(this.#gl.TRIANGLES, this.#mesh.VertexArray.IndexBuffer.Count, this.#gl.UNSIGNED_SHORT, 0);
-    }
 }
 
 export { GameObject }

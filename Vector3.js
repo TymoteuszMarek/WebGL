@@ -1,20 +1,22 @@
 class Vector3{
-    #x;
-    #y;
-    #z;
+    X;
+    Y;
+    Z;
 
+    /**
+     * 
+     * @param {number} x 
+     * @param {number} y 
+     * @param {number} z 
+     */
     constructor(x, y, z){
-        this.#x = x;
-        this.#y = y;
-        this.#z = z;
+        this.X = x;
+        this.Y = y;
+        this.Z = z;
     }
 
-    get X() { this.#x; }
-    get Y() { this.#y; }
-    get Z() { this.#z; }
-
     toArray(){
-        return [ this.#x, this.#y, this.#z ];
+        return [ this.X, this.Y, this.Z ];
     }
 
     static Up = new Vector3(0, 1, 0);

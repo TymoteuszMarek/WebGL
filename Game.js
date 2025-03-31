@@ -8,6 +8,7 @@ import { glMatrix, mat4 } from "./gl-matrix/dist/esm/index.js"
 import { onResize, resizeCanvasToDisplaySize } from "./ResizeCanvas.js";
 import { GameObject } from "./GameObject.js";
 import { Camera } from "./Camera.js";
+import { Vector3 } from "./Vector3.js";
 
 main();
 
@@ -141,27 +142,21 @@ function main(){
     mat4.perspective(projectionMatrix, glMatrix.toRadian(45), gl.canvas.width / gl.canvas.height, 0.1, 1000.0);
     
     const camera = new Camera(gl, projectionMatrix, gameObjects);
+    const cameraTransform = camera.Transform;
+    cameraTransform.translate(new Vector3(0, 0, -20));
 
     gl.enable(gl.DEPTH_TEST);
     gl.enable(gl.CULL_FACE);
     gl.depthFunc(gl.LEQUAL);
 
-    // const identityMatrix = new Float32Array(16);
-    // mat4.identity(identityMatrix);
-
-    // printMatrix(identityMatrix);
-
-    
-    // mat4.translate(identityMatrix, identityMatrix, [2, 2, 2]);
-    // printMatrix(identityMatrix);
-
-    // mat4.rotate(identityMatrix, identityMatrix, 1, [1, 1, 1]);
-    // printMatrix(identityMatrix);
+    let direction = new Vector3(0.01, 0, 0);
 
     const mainloop = function() {
         resizeCanvasToDisplaySize(gl, canvas);
 
         gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
+
+        gameObject.Transform.rotate(new Vector3(0.01, 0, 0));
 
         camera.draw();
 
