@@ -1,4 +1,5 @@
 import { GameObject } from "./GameObject.js";
+import { mat4 } from "./gl-matrix/dist/esm/index.js";
 import { Transform } from "./Transform.js";
 import { Vector3 } from "./Vector3.js";
 
@@ -7,6 +8,7 @@ class Camera{
     #transform;
     #gameObjects;
     #projectionMatrix;
+    #viewMatrix;
 
     /**
      * 
@@ -19,6 +21,7 @@ class Camera{
         this.#transform = new Transform(gl);
         this.#gameObjects = gameObjects;
         this.#projectionMatrix = projectionMatrix;
+        this.#viewMatrix = new Float32Array(16);
     }
 
     get GL() { return this.#gl; }
@@ -27,8 +30,12 @@ class Camera{
     get ProjectionMatrix() { return this.#projectionMatrix; }
 
     draw(){
+        // mat4.invert(this.#viewMatrix, this.#viewMatrix);
+
         for(const gameObject of this.#gameObjects){
             gameObject.bind();
+
+            let matrix = new Float32Array(16);
 
             gameObject.Mesh.Material.setUniformMatrix4fv("u_ProjectionMatrix", this.#projectionMatrix);
             gameObject.Mesh.Material.setUniformMatrix4fv("u_ViewMatrix", this.#transform.WorldMatrix);
