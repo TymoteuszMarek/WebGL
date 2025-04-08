@@ -1,8 +1,8 @@
 class Input{
-    #keyBuffer = {};
-    #keyDownBuffer = {};
+    static #keyBuffer = {};
+    static #keyDownBuffer = {};
 
-    constructor(){
+    static initialize(){
         window.addEventListener("keydown", (e) => {
             if (e.defaultPrevented) {
                 return; // Do nothing if the event was already processed
@@ -30,7 +30,7 @@ class Input{
         }, true);
     }
 
-    update(){
+    static update(){
         this.#keyDownBuffer = {};
     }
 
@@ -38,14 +38,14 @@ class Input{
      * @param {string} key 
      * @returns {boolean}
      */
-    getKey(key){
+    static getKey(key){
         return this.#keyBuffer[key] !== undefined && this.#keyBuffer[key] === true;
     }
     /**
      * @param {string} key 
      * @returns {boolean}
      */
-    getKeyDown(key) {
+    static getKeyDown(key) {
         return this.#keyDownBuffer[key] !== undefined && this.#keyDownBuffer === true;
     }
 }

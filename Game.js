@@ -2,7 +2,7 @@ import { Shader } from "./Shader.js";
 import { Buffer } from "./Buffer.js";
 import { Material } from "./Material.js";
 import { VertexBufferLayout } from "./VertexBufferLayout.js";
-import { Mesh } from "./mesh.js";
+import { Mesh } from "./Mesh.js"
 
 import { glMatrix, mat4 } from "./gl-matrix/dist/esm/index.js"
 import { onResize, resizeCanvasToDisplaySize } from "./ResizeCanvas.js";
@@ -10,6 +10,7 @@ import { GameObject } from "./GameObject.js";
 import { Camera } from "./Camera.js";
 import { Vector3 } from "./Vector3.js";
 import { Input } from "./Input.js";
+import CubeMovement from "./Components/CubeMovement.js";
 
 main();
 
@@ -136,7 +137,7 @@ function main(){
     const mesh = Mesh.createMesh(gl, boxVertices, boxIndices, material);
 
     const gameObject = new GameObject(gl, mesh);
-    const transform = gameObject.Transform;
+    gameObject.attachComponent(new CubeMovement(gl));
     
     const gameObjects = [ gameObject ];
 
@@ -151,37 +152,23 @@ function main(){
     gl.enable(gl.CULL_FACE);
     gl.depthFunc(gl.LEQUAL);
 
-    let direction = new Vector3(0.1, 0, 0);
+    Input.initialize();
 
-    const input = new Input();
-
-    const rotationSpeed = 0.01;
-    const cameraSens = 0.01;
+    for(const go of gameObjects){
+        go.start();
+    }
 
     const mainloop = function() {
         resizeCanvasToDisplaySize(gl, canvas);
 
         gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
 
-        transform.rotate(Vector3.scalar(new Vector3(1, 0.5, 0.25), rotationSpeed));
-        //cameraTransform.rotate(Vector3.scalar(new Vector3(1, 0, 0), cameraSens));
+        Input.update();
 
-        const speed = 0.1;
-
-        if (input.getKey("a")){
-            cameraTransform.translate(Vector3.scalar(Vector3.Left, speed));
-        }
-        if (input.getKey("d")) {
-            cameraTransform.translate(Vector3.scalar(Vector3.Right, speed));
-        }
-        if (input.getKey("s")) {
-            cameraTransform.translate(Vector3.scalar(Vector3.Forward, speed));
-        }
-        if (input.getKey("w")) {
-            cameraTransform.translate(Vector3.scalar(Vector3.Backward, speed));
+        for (const go of gameObjects) {
+            go.update();
         }
 
-        input.update();
         camera.draw();
 
         requestAnimationFrame(mainloop);

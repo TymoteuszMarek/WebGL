@@ -1,5 +1,6 @@
 import { GameObject } from "./GameObject.js";
 import { mat4 } from "./gl-matrix/dist/esm/index.js";
+import GlobalUniforms from "./GlobalUniforms.js";
 import { Transform } from "./Transform.js";
 import { Vector3 } from "./Vector3.js";
 
@@ -36,6 +37,10 @@ class Camera{
             gameObject.bind();
 
             let matrix = new Float32Array(16);
+
+            for(const [name, value] of GlobalUniforms.toIterable()){
+                gameObject.Mesh.Material.setUniform3f(name, value.x, value.y, value.z);
+            }
 
             gameObject.Mesh.Material.setUniformMatrix4fv("u_ProjectionMatrix", this.#projectionMatrix);
             gameObject.Mesh.Material.setUniformMatrix4fv("u_ViewMatrix", this.#transform.WorldMatrix);
